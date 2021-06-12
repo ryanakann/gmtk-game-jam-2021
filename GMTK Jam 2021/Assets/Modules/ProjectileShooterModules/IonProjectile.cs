@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class IonProjectile : MonoBehaviour
+public class IonProjectile : Projectile
 {
 
     [SerializeField]
@@ -18,10 +18,10 @@ public class IonProjectile : MonoBehaviour
         rb.velocity = transform.forward * speed;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    protected override void Hit(GameObject obj_hit)
     {
-        ShieldModule shield = collision.gameObject.GetComponent<ShieldModule>();
-        Module module = collision.gameObject.GetComponent<Module>();
+        ShieldModule shield = obj_hit.GetComponent<ShieldModule>();
+        Module module = obj_hit.GetComponent<Module>();
         if (shield != null)
         {
             shield.ShieldDamage(disable_time);
