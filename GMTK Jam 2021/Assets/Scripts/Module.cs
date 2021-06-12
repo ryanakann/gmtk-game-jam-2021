@@ -86,20 +86,17 @@ public class Module : MonoBehaviour {
 
         foreach (Collider2D collider in colliders)
         {
-            Vector2 diff = collider.transform.position - transform.position;
-
-            float distance = diff.magnitude;
-
             Rigidbody2D rb = collider.attachedRigidbody;
 
             if (rb != null)
             {
-                float force = power / distance;
-                rb.AddForce(force * diff.normalized);
+                rb.AddExplosionForce(power, transform.position, radius);
             }
 
             Module module = collider.GetComponent<Module>();
             if (module != null){
+                Vector2 diff = collider.transform.position - transform.position;
+                float distance = diff.magnitude;
                 module.Damage(power / distance);
             }
         }
