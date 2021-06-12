@@ -50,8 +50,13 @@ public class LaserModule : Module
 
         if (hit.collider != null)
         {
+            ShieldModule shield = hit.collider.GetComponent<ShieldModule>();
             Module module = hit.collider.GetComponent<Module>();
-            if (module != null)
+            if (shield != null)
+            {
+                shield.ShieldDamage(damage_per_second * Time.deltaTime);
+            }
+            else if (module != null)
             {
                 module.Damage(damage_per_second * Time.deltaTime);
             }
