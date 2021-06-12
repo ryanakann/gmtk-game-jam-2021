@@ -21,19 +21,15 @@ public class LaserModule : Module
     [SerializeField]
     float explode_radius;
 
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    ParticleSystem particles;
+
+    public override void OnButtonDown()
     {
-        
+        particles.Play();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    void Activate()
+    public override void OnButtonHeld()
     {
         current_heat += heatup_rate * Time.deltaTime;
 
@@ -41,6 +37,11 @@ public class LaserModule : Module
             Explode(explode_power, explode_radius);
         else
             Shoot();
+    }
+
+    public override void OnButtonUp()
+    {
+        particles.Pause();
     }
 
     void Shoot()

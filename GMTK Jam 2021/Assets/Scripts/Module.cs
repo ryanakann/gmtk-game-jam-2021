@@ -54,7 +54,6 @@ public class Module : MonoBehaviour {
             Die();
         }
     }
-
     public virtual void Die() {
         Destroy(gameObject);
     }
