@@ -8,7 +8,7 @@ public class Module : MonoBehaviour {
         public Module child;
     }
 
-    KeyCode button;
+    List<KeyCode> buttons;
     List<Port> ports;
     public float health;
     public float maxHealth = 10f;
@@ -18,7 +18,11 @@ public class Module : MonoBehaviour {
     }
 
     public void AssignButton(KeyCode key) {
-        button = key;
+        buttons.Add(key);
+    }
+
+    public bool UnassignButton(KeyCode key) {
+        return buttons.Remove(key);
     }
 
     public void AttachChildAtPort(Module child, int portIndex) {
@@ -40,15 +44,15 @@ public class Module : MonoBehaviour {
         return result;
     }
 
-    void Update() {
-        if (Input.GetKeyDown(button)) {
-            OnButtonDown();
+    protected virtual void Update() {
+        bool buttonHeld = false;
+        foreach (KeyCode button in buttons) {
+            if (Input.GetKey(button)) {
+                buttonHeld = true;
+            }
         }
-        if (Input.GetKey(button)) {
+        if (buttonHeld) {
             OnButtonHeld();
-        }
-        if (Input.GetKeyUp(button)) {
-            OnButtonUp();
         }
         if (health <= 0) {
             Die();
@@ -56,6 +60,7 @@ public class Module : MonoBehaviour {
     }
     public virtual void Die() {
         Destroy(gameObject);
+        //TODO: destroy child modules?
     }
 
     public virtual void OnButtonDown() {
@@ -70,31 +75,26 @@ public class Module : MonoBehaviour {
         //no thoughts head empty
     }
 
-    public void Damage(float damage_amount)
-    {
+    public void Damage(float damage_amount) {
         health -= damage_amount;
 
-        if (health <= 0)
-        {
+        if (health <= 0) {
             Die();
         }
     }
 
-    public void Explode(float power, float radius)
-    {
+    public void Explode(float power, float radius) {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, radius);
 
-        foreach (Collider2D collider in colliders)
-        {
+        foreach (Collider2D collider in colliders) {
             Rigidbody2D rb = collider.attachedRigidbody;
 
-            if (rb != null)
-            {
+            if (rb != null) {
                 rb.AddExplosionForce(power, transform.position, radius);
             }
 
             Module module = collider.GetComponent<Module>();
-            if (module != null){
+            if (module != null) {
                 Vector2 diff = collider.transform.position - transform.position;
                 float distance = diff.magnitude;
                 module.Damage(power / distance);
