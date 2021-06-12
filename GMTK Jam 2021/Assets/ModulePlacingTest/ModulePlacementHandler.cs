@@ -4,27 +4,31 @@ using UnityEngine;
 
 public class ModulePlacementHandler : MonoBehaviour
 {
+    Transform portPoints, activatedPort;
+    bool validPort;
 
-    Transform activatedSector;
-    bool validSector;
-
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        portPoints = transform.FindDeepChild("PortPoints");
     }
 
-    // Update is called once per frame
     void Update()
     {
-        CheckActivatedSector();   
+        CheckActivatedPort();   
     }
 
-    private void CheckActivatedSector()
+    private void CheckActivatedPort()
     {
-        // when activating sector
-        // check collision in zone (have a hidden hex trigger thingy)
-        // update highlight based on the hidden hex trigger thingy
+        validPort = Physics2D.OverlapCircle(activatedPort.position, 1f);
+        
+        if (validPort)
+        {
+            // show the good green symbol
+        }
+        else
+        {
+            // show the big bad red symbol
+        }
     }
 
     private void OnMouseOver()
@@ -32,40 +36,34 @@ public class ModulePlacementHandler : MonoBehaviour
         if (MouseController.instance.targetModule)
         {
             float minDistance = float.PositiveInfinity;
-            Transform sector = null;
-            foreach (Transform t in transform)
+            Transform port = null;
+            foreach (Transform t in portPoints)
             {
                 float dist = Vector2.Distance(t.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
                 if (dist < minDistance)
                 {
                     minDistance = dist;
-                    sector = t;
+                    port = t;
                 }
             }
-            if (sector && sector != activatedSector)
+            if (port && port != activatedPort)
             {
-                activatedSector.gameObject.SetActive(false);
-                activatedSector = sector;
+                activatedPort.gameObject.SetActive(false);
+                activatedPort = port;
             }
-            activatedSector = sector;
-            if (activatedSector)
-            {
-                activatedSector.gameObject.SetActive(true);
-            }
+            activatedPort = port;
+            activatedPort?.gameObject?.SetActive(true);
         }
     }
 
     private void OnMouseExit()
     {
-        if (activatedSector)
-        {
-            activatedSector.gameObject.SetActive(false);
-        }
+        activatedPort?.gameObject?.SetActive(false);
     }
 
     private void OnMouseUp()
     {
-        if (MouseController.instance.targetModule && validSector)
+        if (MouseController.instance.targetModule && validPort)
         {
             // place targetModule
         }
