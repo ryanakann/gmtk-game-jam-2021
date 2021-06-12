@@ -8,8 +8,9 @@ public class Module : MonoBehaviour {
         public Module child;
     }
 
-    List<KeyCode> buttons;
+    HashSet<KeyCode> buttons;
     List<Port> ports;
+    protected GameObject mainModule;//which ship am I attached to?
     public float health;
     public float maxHealth = 10f;
 
@@ -27,12 +28,14 @@ public class Module : MonoBehaviour {
 
     public void AttachChildAtPort(Module child, int portIndex) {
         ports[portIndex].child = child;
+        child.mainModule = mainModule;
         //TODO: physically attach the module's gameobject
     }
 
     public Module DetachAtPort(int portIndex) {
         Module result = ports[portIndex].child;
         //TODO: physically detach the module's gameobject
+        ports[portIndex].child.mainModule = null;
         ports[portIndex].child = null;
         return result;
     }
