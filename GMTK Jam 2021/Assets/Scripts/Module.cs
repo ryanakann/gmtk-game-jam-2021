@@ -53,15 +53,13 @@ public class Module : MonoBehaviour {
     }
 
     protected virtual void Update() {
-        if (health <= 0)
-        {
+        if (health <= 0) {
             Die();
         }
 
         bool buttonHeld = false;
 
-        if (is_disabled)
-        {
+        if (is_disabled) {
             disabled_timer -= Time.deltaTime;
 
             if (disabled_timer <= 0f)
@@ -71,6 +69,9 @@ public class Module : MonoBehaviour {
         }
 
         foreach (KeyCode button in buttons) {
+            //TODO: generic controller that player and AI can control
+            //if player, still take from Input
+            //if AI, take from AI's set of pressed keys
             if (Input.GetKey(button)) {
                 buttonHeld = true;
             }
@@ -96,8 +97,7 @@ public class Module : MonoBehaviour {
         //no thoughts head empty
     }
 
-    public virtual void Heal(float heal_amount)
-    {
+    public virtual void Heal(float heal_amount) {
         health += heal_amount;
 
         if (health >= max_health)
@@ -112,8 +112,7 @@ public class Module : MonoBehaviour {
         }
     }
 
-    public virtual void Disable(float seconds_disabled)
-    {
+    public virtual void Disable(float seconds_disabled) {
         is_disabled = true;
         disabled_timer = seconds_disabled;
     }
