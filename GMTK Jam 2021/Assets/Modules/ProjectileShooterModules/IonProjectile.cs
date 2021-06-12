@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class IonCannonProjectile : MonoBehaviour
+public class IonProjectile : MonoBehaviour
 {
 
     [SerializeField]
