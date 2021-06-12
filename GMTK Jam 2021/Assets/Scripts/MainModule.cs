@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Controller))]
 public class MainModule : Module {
     HashSet<Module> modules;//modules under my control
     public void AddModule(Module m) {
