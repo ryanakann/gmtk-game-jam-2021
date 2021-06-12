@@ -52,7 +52,7 @@ public class ShieldModule : Module
                 Deactivate();
             }
         }
-        else
+        else if (!is_disabled)
         {
             current_charge += charge_regened_per_second * Time.deltaTime;
         }
@@ -76,6 +76,12 @@ public class ShieldModule : Module
     {
         is_active = false;
         shield_collider.enabled = false;
+    }
+
+    public override void Disable(float seconds_disabled)
+    {
+        base.Disable(seconds_disabled);
+        Deactivate();
     }
 
     public void ShieldDamage(float damage_amount)
