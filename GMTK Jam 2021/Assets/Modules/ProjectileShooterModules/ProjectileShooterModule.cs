@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IonCannonModule : Module
+public class ProjectileShooterModule : Module
 {
 
     [SerializeField]

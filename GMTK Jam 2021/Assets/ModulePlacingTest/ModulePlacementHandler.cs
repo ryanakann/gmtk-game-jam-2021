@@ -19,6 +19,9 @@ public class ModulePlacementHandler : MonoBehaviour
 
     private void CheckActivatedPort()
     {
+        if (!activatedPort)
+            return;
+
         validPort = Physics2D.OverlapCircle(activatedPort.position, 1f);
         
         if (validPort)
