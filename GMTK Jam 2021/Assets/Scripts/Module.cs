@@ -70,4 +70,39 @@ public class Module : MonoBehaviour {
     public virtual void OnButtonUp() {
         //no thoughts head empty
     }
+
+    public void Damage(float damage_amount)
+    {
+        health -= damage_amount;
+
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    public void Explode(float power, float radius)
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, radius);
+
+        foreach (Collider2D collider in colliders)
+        {
+            Vector2 diff = collider.transform.position - transform.position;
+
+            float distance = diff.magnitude;
+
+            Rigidbody2D rb = collider.attachedRigidbody;
+
+            if (rb != null)
+            {
+                float force = power / distance;
+                rb.AddForce(force * diff.normalized);
+            }
+
+            Module module = collider.GetComponent<Module>();
+            if (module != null){
+                module.Damage(power / distance);
+            }
+        }
+    }
 }
