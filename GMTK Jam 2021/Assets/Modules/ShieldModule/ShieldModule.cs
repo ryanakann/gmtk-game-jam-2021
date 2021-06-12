@@ -60,8 +60,10 @@ public class ShieldModule : Module
 
     public override void OnButtonDown()
     {
-        if (current_charge >= (max_charge * minimum_charge_percent_for_activation))
+        if (!is_active && current_charge >= (max_charge * minimum_charge_percent_for_activation))
             Activate();
+        else if (is_active)
+            Deactivate();
         else
             current_charge -= premature_activation_penalty;
     }
