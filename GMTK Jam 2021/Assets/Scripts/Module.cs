@@ -11,11 +11,16 @@ public class Module : MonoBehaviour {
     HashSet<KeyCode> buttons;
     List<Port> ports;
     protected GameObject mainModule;//which ship am I attached to?
-    public float health;
-    public float maxHealth = 10f;
+
+    [SerializeField]
+    float max_health;
+    float health;
+
+    float disabled_timer = 0f;
+    protected bool is_disabled = false;
 
     protected virtual void Start() {
-        health = maxHealth;
+        health = max_health;
     }
 
     public void AssignButton(KeyCode key) {
@@ -48,17 +53,31 @@ public class Module : MonoBehaviour {
     }
 
     protected virtual void Update() {
+        if (health <= 0) {
+            Die();
+        }
+
         bool buttonHeld = false;
+
+        if (is_disabled) {
+            disabled_timer -= Time.deltaTime;
+
+            if (disabled_timer <= 0f)
+                is_disabled = false;
+            else
+                return;
+        }
+
         foreach (KeyCode button in buttons) {
+            //TODO: generic controller that player and AI can control
+            //if player, still take from Input
+            //if AI, take from AI's set of pressed keys
             if (Input.GetKey(button)) {
                 buttonHeld = true;
             }
         }
         if (buttonHeld) {
             OnButtonHeld();
-        }
-        if (health <= 0) {
-            Die();
         }
     }
     public virtual void Die() {
@@ -78,12 +97,24 @@ public class Module : MonoBehaviour {
         //no thoughts head empty
     }
 
+    public virtual void Heal(float heal_amount) {
+        health += heal_amount;
+
+        if (health >= max_health)
+            health = max_health;
+    }
+
     public virtual void Damage(float damage_amount) {
         health -= damage_amount;
 
         if (health <= 0) {
             Die();
         }
+    }
+
+    public virtual void Disable(float seconds_disabled) {
+        is_disabled = true;
+        disabled_timer = seconds_disabled;
     }
 
     public void Explode(float power, float radius) {
