@@ -14,7 +14,7 @@ public class Module : MonoBehaviour {
     public float health;
     public float maxHealth = 10f;
 
-    private void Start() {
+    protected virtual void Start() {
         health = maxHealth;
     }
 
@@ -78,7 +78,7 @@ public class Module : MonoBehaviour {
         //no thoughts head empty
     }
 
-    public void Damage(float damage_amount) {
+    public virtual void Damage(float damage_amount) {
         health -= damage_amount;
 
         if (health <= 0) {
