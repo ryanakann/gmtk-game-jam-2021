@@ -7,7 +7,7 @@ public class MouseController : MonoBehaviour
 
     public static MouseController instance;
 
-    public GameObject targetModule;
+    [HideInInspector] public GameObject targetModule;
 
     public bool mouseDown;
 
