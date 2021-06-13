@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class Module : MonoBehaviour {
     public class Port {
         public Module parent;
@@ -75,10 +76,7 @@ public class Module : MonoBehaviour {
         }
 
         foreach (KeyCode button in buttons) {
-            //TODO: generic controller that player and AI can control
-            //if player, still take from Input
-            //if AI, take from AI's set of pressed keys
-            if (Input.GetKey(button)) {
+            if (mainModule.GetComponent<Controller>().GetKey(button)) {
                 buttonHeld = true;
             }
         }
