@@ -20,6 +20,12 @@ public class ShieldModule : Module
     [SerializeField]
     float premature_activation_penalty;
 
+    [SerializeField]
+    float pop_disabling_radius;
+
+    [SerializeField]
+    float pop_disabling_duration;
+
     Collider2D shield_collider;
 
     protected override void Start()
@@ -49,7 +55,7 @@ public class ShieldModule : Module
 
             if (current_charge <= 0f)
             {
-                Deactivate();
+                Pop();
             }
         }
         else if (!is_disabled)
@@ -80,6 +86,24 @@ public class ShieldModule : Module
         shield_collider.enabled = false;
     }
 
+    void Pop()
+    {
+
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, pop_disabling_radius);
+
+        foreach (Collider2D collider in colliders)
+        {
+            Module module = collider.GetComponent<Module>();
+
+            if (module != null)
+            {
+                module.Disable(pop_disabling_duration);
+            }
+        }
+
+        Deactivate();
+    }
+
     public override void Disable(float seconds_disabled)
     {
         base.Disable(seconds_disabled);
@@ -91,7 +115,10 @@ public class ShieldModule : Module
         current_charge -= damage_amount;
 
         if (current_charge < 0f)
+        {
             current_charge = 0f;
+            Pop();
+        }
     }
 
 }

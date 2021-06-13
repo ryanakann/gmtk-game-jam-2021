@@ -27,6 +27,8 @@ public class Module : MonoBehaviour {
     protected bool is_disabled = false;
 
     protected virtual void Start() {
+        buttons = new HashSet<KeyCode>();
+        ports = new List<Port>();
         health = max_health;
     }
 
@@ -41,15 +43,17 @@ public class Module : MonoBehaviour {
     public void AttachChildAtPort(Module child, int portIndex) {
         ports[portIndex].child = child;
         child.mainModule = mainModule;
+        mainModule.GetComponent<MainModule>().AddModule(child);
         //TODO: physically attach the module's gameobject
     }
 
     public Module DetachAtPort(int portIndex) {
-        Module result = ports[portIndex].child;
+        Module removed = ports[portIndex].child;
+        mainModule.GetComponent<MainModule>().RemoveModule(removed);
         //TODO: physically detach the module's gameobject
         ports[portIndex].child.mainModule = null;
         ports[portIndex].child = null;
-        return result;
+        return removed;
     }
     public Module GetModuleAtPort(int portIndex) {
         Module result = ports[portIndex].child;
