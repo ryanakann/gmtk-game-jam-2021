@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class MouseController : MonoBehaviour
 {
-
-    enum MouseState { Up, Released, Pressed, Down };
-
     public static MouseController instance;
 
     [HideInInspector] public Transform targetModule;
