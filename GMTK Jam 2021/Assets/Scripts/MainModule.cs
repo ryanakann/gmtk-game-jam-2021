@@ -18,9 +18,11 @@ public class MainModule : Module {
         centerOfMass = getCenterOfMass();
     }
     public void AddModule(Module m) {
+        m.isDetached = false;
         modules.Add(m);
     }
     public bool RemoveModule(Module m) {
+        m.isDetached = true;
         return modules.Remove(m);
     }
     public Vector2 getCenterOfMass() {
