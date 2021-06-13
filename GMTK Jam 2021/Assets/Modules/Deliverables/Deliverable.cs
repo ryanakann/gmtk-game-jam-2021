@@ -56,9 +56,8 @@ public class Deliverable : Module
         GameManager.instance.Pay(payout);
     }
 
-    public override void Jostle(float impulse)
+    public void Jostle(float impulse)
     {
-        base.Jostle(impulse);
         if (impulse >= jostle_velocity_threshold)
         {
             satisfaction -= impulse * jostle_satisfaction_coefficient;

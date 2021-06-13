@@ -7,6 +7,8 @@ public class MainModule : Module {
     HashSet<Module> modules;//modules under my control
     public Vector2 centerOfMass { get; private set; }
 
+    List<Deliverable> deliverables;
+
     protected override void Start() {
         base.Start();
         modules = new HashSet<Module>();
@@ -34,5 +36,13 @@ public class MainModule : Module {
             weightedAverage += (Vector2)m.transform.position * m.GetComponent<Rigidbody2D>().mass;
         }
         return weightedAverage;
+    }
+
+    public void PropagateJostle(float impact)
+    {
+        foreach(var d in deliverables)
+        {
+            d.Jostle(impact);
+        }
     }
 }

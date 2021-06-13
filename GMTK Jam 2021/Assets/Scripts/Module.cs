@@ -147,16 +147,17 @@ public class Module : MonoBehaviour {
         }
     }
 
-    public virtual void Jostle(float impulse) {
-        if (impulse > impact_velocity_threshold) {
-            Damage(impulse * impact_damage_coefficient);
-        }
-    }
-
     private void OnCollisionEnter2D(Collision2D collision) {
         if (collision.gameObject.tag != "projectile") {
             float impulse = collision.contacts[0].normalImpulse;
-            Jostle(impulse);
+            if (impulse > impact_velocity_threshold)
+            {
+                Damage(impulse * impact_damage_coefficient);
+            }
+            if (mainModule != this)
+            {
+                mainModule.GetComponent<MainModule>().PropagateJostle(impulse);
+            }
         }
     }
 }
