@@ -15,16 +15,30 @@ public class MainModule : Module {
         mainModule = gameObject;
         AddModule(this);
     }
+    
     protected override void Update() {
         base.Update();
         centerOfMass = getCenterOfMass();
     }
+    
     public void AddModule(Module m) {
         modules.Add(m);
     }
+    
     public bool RemoveModule(Module m) {
         return modules.Remove(m);
     }
+
+    public void AddDeliverable(Deliverable d)
+    {
+        deliverables.Add(d);
+    }
+
+    public bool RemoveDeliverable(Deliverable d)
+    {
+        return deliverables.Remove(d);
+    }
+
     public Vector2 getCenterOfMass() {
         Vector2 weightedAverage = transform.position * GetComponent<Rigidbody2D>().mass;
         foreach (Module m in modules) {

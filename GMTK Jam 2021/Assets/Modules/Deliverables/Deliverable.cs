@@ -2,8 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public delegate void DeliveryEvent();
+public delegate void EmptySpot(Transform delivery_spot);
+
 public class Deliverable : Module
 {
+
+    public DeliveryEvent delivery_resolution;
+    public EmptySpot empty_spot_event;
 
     [SerializeField]
     float max_payout;
@@ -26,6 +32,7 @@ public class Deliverable : Module
     float satisfaction;
 
     Transform destination;
+    Transform spawn_point;
 
     private void Awake()
     {
@@ -40,6 +47,16 @@ public class Deliverable : Module
         
     }
 
+    public void SetSpawnPoint(Transform in_spawn_point)
+    {
+        spawn_point = in_spawn_point;
+    }
+
+    public void SetDeliveryLocation(DeliveryLocation delivery_location)
+    {
+        destination = delivery_location.transform;
+    }
+
     public void IncreaseSatisfaction(float satisfaction_amount)
     {
         satisfaction += satisfaction_amount;
@@ -52,8 +69,28 @@ public class Deliverable : Module
 
     void GetDelivered()
     {
-        float payout = max_payout * (satisfaction / satisfaction_max);
+        float percent_satisfied = (satisfaction / satisfaction_max);
+        float payout = max_payout * percent_satisfied;
         GameManager.instance.Pay(payout);
+        GameManager.instance.Rate(percent_satisfied);
+
+        mainModule.GetComponent<MainModule>().RemoveDeliverable(this);
+
+        delivery_resolution.Invoke();
+    }
+
+    public override void SetParent(Module parent, Transform pivot)
+    {
+        base.SetParent(parent, pivot);
+        mainModule.GetComponent<MainModule>().AddDeliverable(this);
+
+        empty_spot_event.Invoke(spawn_point);
+    }
+
+    public override void Die()
+    {
+        delivery_resolution.Invoke();
+        base.Die();
     }
 
     public void Jostle(float impulse)
