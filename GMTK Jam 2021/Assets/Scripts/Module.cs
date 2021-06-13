@@ -4,13 +4,9 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Module : MonoBehaviour {
-    public class Port {
-        public Module parent;
-        public Module child;
-    }
-
     HashSet<KeyCode> buttons;
-    List<Port> ports;
+    protected List<Module> children;
+    protected Module parent;
     protected GameObject mainModule;//which ship am I attached to?
 
     [SerializeField]
@@ -29,8 +25,8 @@ public class Module : MonoBehaviour {
     public bool isDetached;
 
     protected virtual void Start() {
+        children = new List<Module>();
         buttons = new HashSet<KeyCode>();
-        ports = new List<Port>();
         health = max_health;
     }
 
@@ -42,27 +38,28 @@ public class Module : MonoBehaviour {
         return buttons.Remove(key);
     }
 
-    public void AttachChildAtPort(Module child, int portIndex) {
-        ports[portIndex].child = child;
-        child.mainModule = mainModule;
-        mainModule.GetComponent<MainModule>().AddModule(child);
+    public void SetParent(Module parent, Transform pivot) {
+        isDetached = false;
+        parent.children.Add(this);
+        this.parent = parent;
+        mainModule = parent.mainModule;
+        mainModule.GetComponent<MainModule>().AddModule(this);
         //TODO: physically attach the module's gameobject
+        FixedJoint2D joint = gameObject.AddComponent<FixedJoint2D>();
+        transform.position = Vector2.zero;
+        transform.SetParent(pivot);
     }
 
-    public Module DetachAtPort(int portIndex) {
-        Module removed = ports[portIndex].child;
-        mainModule.GetComponent<MainModule>().RemoveModule(removed);
-        //TODO: physically detach the module's gameobject
-        ports[portIndex].child.mainModule = null;
-        ports[portIndex].child = null;
-        return removed;
+    public void Detach() {
+        isDetached = true;
+        mainModule.GetComponent<MainModule>().RemoveModule(this);
+        parent.children.Remove(this);
+        mainModule = null;
+        parent = null;
+        Destroy(GetComponent<FixedJoint2D>());
     }
-    public Module GetModuleAtPort(int portIndex) {
-        Module result = ports[portIndex].child;
-        if (result == this) {//attached to parent by this port
-            return ports[portIndex].parent;
-        }
-        return result;
+    public List<Module> GetChildModules() {
+        return children;
     }
 
     protected virtual void Update() {
@@ -92,7 +89,7 @@ public class Module : MonoBehaviour {
     }
     public virtual void Die() {
         Destroy(gameObject);
-        //TODO: destroy child modules?
+        children.ForEach(child => child.Die());
     }
 
     public virtual void OnButtonDown() {
@@ -146,20 +143,16 @@ public class Module : MonoBehaviour {
         }
     }
 
-    public virtual void Jostle(float impulse)
-    {
-        if (impulse > impact_velocity_threshold)
-        {
+    public virtual void Jostle(float impulse) {
+        if (impulse > impact_velocity_threshold) {
             Damage(impulse * impact_damage_coefficient);
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag != "projectile")
-        {
+    private void OnCollisionEnter2D(Collision2D collision) {
+        if (collision.gameObject.tag != "projectile") {
             float impulse = collision.contacts[0].normalImpulse;
-            Jostle(impulse);   
+            Jostle(impulse);
         }
     }
 }

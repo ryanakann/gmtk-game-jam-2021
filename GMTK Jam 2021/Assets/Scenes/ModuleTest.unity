@@ -657,6 +657,8 @@ GameObject:
   - component: {fileID: 2046043724}
   - component: {fileID: 2046043723}
   - component: {fileID: 2046043726}
+  - component: {fileID: 2046043728}
+  - component: {fileID: 2046043727}
   m_Layer: 0
   m_Name: Thruster
   m_TagString: Untagged
@@ -832,3 +834,41 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 5.1784616, y: 2.5001342}
   m_EdgeRadius: 0
+--- !u!114 &2046043727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2046043722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f366ded9e4e4e4922941045c796463f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  max_health: 0
+  impact_velocity_threshold: 0
+  impact_damage_scaler: 0
+  isDetached: 0
+  strength: 30
+--- !u!50 &2046043728
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2046043722}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
