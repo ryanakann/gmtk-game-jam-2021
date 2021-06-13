@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Module_mat
   m_Shader: {fileID: -6465566751694194690, guid: ff5f923673aad924db2d3c6a9a8fad27, type: 3}
-  m_ShaderKeywords: 
+  m_ShaderKeywords: RARITY_COMMON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -19,6 +19,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Texture2D_6d54c6bb6ac4465eb3bcd438df1a9382:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - Texture2D_e77f50a8c47c46389941c7aaea9b2931:
         m_Texture: {fileID: 2800000, guid: e7d40d67318b2bd489b035c8f6fe7bd4, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -41,6 +45,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - Boolean_75ad6afce7b7451fa88e7acbad0d3139: 0
+    - RARITY: 0
     - Vector1_810b5aed70ad4145b08fcea1958ae56a: 0
     m_Colors:
     - Color_c87d391176c7459690aead8070b3ecc2: {r: 1, g: 1, b: 1, a: 1}
