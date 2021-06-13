@@ -24,10 +24,13 @@ public class Module : MonoBehaviour {
 
     public bool isDetached;
 
+    Rigidbody2D rb;
+
     protected virtual void Start() {
         children = new List<Module>();
         buttons = new HashSet<KeyCode>();
         health = max_health;
+        rb = GetComponent<Rigidbody2D>();
     }
 
     public void AssignButton(KeyCode key) {
@@ -38,17 +41,22 @@ public class Module : MonoBehaviour {
         return buttons.Remove(key);
     }
 
-    public void SetParent(Module parent, Transform pivot) {
+    public virtual void AddChild(Module child)
+    {
+        children.Add(child);
+    }
+
+    public virtual void SetParent(Module parent, Transform pivot) {
         isDetached = false;
-        parent.children.Add(this);
+        parent.AddChild(this);
         this.parent = parent;
         mainModule = parent.mainModule;
         mainModule.GetComponent<MainModule>().AddModule(this);
 
         //physically attach the module's gameobject
+        transform.position = pivot.position;
+        transform.up = -pivot.up;
         FixedJoint2D joint = gameObject.AddComponent<FixedJoint2D>();
-        transform.position = Vector2.zero;
-        transform.forward = pivot.forward;
         joint.connectedBody = parent.GetComponent<Rigidbody2D>();
     }
 
@@ -69,6 +77,9 @@ public class Module : MonoBehaviour {
         if (health <= 0) {
             Die();
         }
+
+        if (!isDetached)
+            rb.angularVelocity = 0;
 
         bool buttonHeld = false;
 
@@ -147,16 +158,17 @@ public class Module : MonoBehaviour {
         }
     }
 
-    public virtual void Jostle(float impulse) {
-        if (impulse > impact_velocity_threshold) {
-            Damage(impulse * impact_damage_coefficient);
-        }
-    }
-
     private void OnCollisionEnter2D(Collision2D collision) {
         if (collision.gameObject.tag != "projectile") {
             float impulse = collision.contacts[0].normalImpulse;
-            Jostle(impulse);
+            if (impulse > impact_velocity_threshold)
+            {
+                Damage(impulse * impact_damage_coefficient);
+            }
+            if (mainModule != this)
+            {
+                mainModule.GetComponent<MainModule>().PropagateJostle(impulse);
+            }
         }
     }
 }

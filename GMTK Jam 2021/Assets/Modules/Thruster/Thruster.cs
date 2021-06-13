@@ -35,7 +35,7 @@ public class Thruster : Module {
     }
 
     //TODO: this can be done whenever modules are added/destroyed, not necessary on every update
-    void updateButtons() {
+    public void updateButtons() {
         if (shouldFireForward()) {
             AssignButton(KeyCode.W);
         } else {
@@ -59,7 +59,11 @@ public class Thruster : Module {
     }
 
     protected override void Update() {
-        updateButtons();
+        if (isDetached)
+        {
+            return;
+        }
+        //updateButtons();
         firing = false;
         //TODO: set flame sprite inactive
         base.Update();//will determine if still firing

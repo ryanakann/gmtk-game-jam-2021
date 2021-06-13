@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Rating { ONE, TWO, THREE, FOUR, FIVE };
-
 public class GameManager : MonoBehaviour
 {
 
@@ -17,26 +15,15 @@ public class GameManager : MonoBehaviour
         money += payment;
     }
 
-    public void Rate(Rating rating)
+    public void Rate(float percent_satisfied)
     {
-        switch (rating)
-        {
-            case Rating.ONE:
-                score -= 1f;
-                break;
-            case Rating.TWO:
-                score -= 0.5f;
-                break;
-            case Rating.THREE:
-                break;
-            case Rating.FOUR:
-                score += 0.5f;
-                break;
-            case Rating.FIVE:
-                score += 1f;
-                break;
-            default:
-                break;
-        }
+        if (percent_satisfied <= 0.2f)
+            score -= 1f;
+        else if (percent_satisfied <= 0.4f)
+            score -= 0.5f;
+        else if (percent_satisfied >= 0.6f)
+            score += 0.5f;
+        else if (percent_satisfied >= 0.8f)
+            score += 1f;
     }
 }

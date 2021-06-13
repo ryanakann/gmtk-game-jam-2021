@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ModulePlacementHandler : MonoBehaviour
 {
-    Transform portPoints, activatedPort;
+    [HideInInspector] public Transform portPoints, activatedPort;
     bool validPort;
 
     void Awake()
@@ -12,17 +12,12 @@ public class ModulePlacementHandler : MonoBehaviour
         portPoints = transform.FindDeepChild("PortPoints");
     }
 
-    void Update()
-    {
-        CheckActivatedPort();   
-    }
-
-    private void CheckActivatedPort()
+    public void CheckActivatedPort()
     {
         if (!activatedPort)
             return;
 
-        validPort = Physics2D.OverlapCircle(activatedPort.position, 1f);
+        validPort = Physics2D.OverlapCircle(activatedPort.position, 0.5f);
         
         if (validPort)
         {
@@ -34,41 +29,41 @@ public class ModulePlacementHandler : MonoBehaviour
         }
     }
 
-    private void OnMouseOver()
+    public void MouseOver()
     {
-        if (MouseController.instance.targetModule)
+        float minDistance = float.PositiveInfinity;
+        Transform port = null;
+        foreach (Transform t in portPoints)
         {
-            float minDistance = float.PositiveInfinity;
-            Transform port = null;
-            foreach (Transform t in portPoints)
+            float dist = Vector2.Distance(t.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            if (dist < minDistance)
             {
-                float dist = Vector2.Distance(t.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
-                if (dist < minDistance)
-                {
-                    minDistance = dist;
-                    port = t;
-                }
+                minDistance = dist;
+                port = t;
             }
-            if (port && port != activatedPort)
-            {
-                activatedPort.gameObject.SetActive(false);
-                activatedPort = port;
-            }
-            activatedPort = port;
-            activatedPort?.gameObject?.SetActive(true);
         }
+        if (port && activatedPort && port != activatedPort)
+        {
+            activatedPort.gameObject.SetActive(false);
+        }
+        activatedPort = port;
+        if (activatedPort)
+            activatedPort.gameObject.SetActive(true);
+    }
+
+    public void ClearPort()
+    {
+        if (activatedPort)
+            activatedPort.gameObject.SetActive(false);
     }
 
     private void OnMouseExit()
     {
-        activatedPort?.gameObject?.SetActive(false);
+        ClearPort();    
     }
 
-    private void OnMouseUp()
+    public void AddModule(Module module)
     {
-        if (MouseController.instance.targetModule && validPort)
-        {
-            // place targetModule
-        }
+        module.SetParent(GetComponent<Module>(), activatedPort);
     }
 }
