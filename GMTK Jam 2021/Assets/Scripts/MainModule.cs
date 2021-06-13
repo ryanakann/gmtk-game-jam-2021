@@ -3,21 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Controller))]
+[RequireComponent(typeof(Rigidbody2D))]
 public class MainModule : Module {
     HashSet<Module> modules;//modules under my control
-    public Vector2 centerOfMass { get; private set; }
 
     List<Deliverable> deliverables = new List<Deliverable>();
+    [HideInInspector] public Rigidbody2D rb;
 
-    protected override void Start() {
-        base.Start();
+    protected void Start() {
         modules = new HashSet<Module>();
         mainModule = gameObject;
         AddModule(this);
+        rb = GetComponent<Rigidbody2D>();
+        foreach (var t in GetComponentsInChildren<Thruster>())
+        {
+            t.SetParent(this, t.transform);
+        }
     }
     protected override void Update() {
         base.Update();
-        centerOfMass = getCenterOfMass();
     }
     public void AddModule(Module m) {
         modules.Add(m);
@@ -40,22 +44,20 @@ public class MainModule : Module {
         }
         return result;
     }
-    public Vector2 getCenterOfMass() {
-        Vector2 weightedAverage = transform.position * GetComponent<Rigidbody2D>().mass;
-        foreach (Module m in modules) {
-            if (m == this) {
-                continue;
-            }
-            weightedAverage += (Vector2)m.transform.position * m.GetComponent<Rigidbody2D>().mass;
-        }
-        return weightedAverage;
-    }
 
     public void PropagateJostle(float impact)
     {
         foreach(var d in deliverables)
         {
             d.Jostle(impact);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.otherCollider.GetComponent<Module>())
+        {
+            collision.otherCollider.GetComponent<Module>().OnCollision(collision);
         }
     }
 }

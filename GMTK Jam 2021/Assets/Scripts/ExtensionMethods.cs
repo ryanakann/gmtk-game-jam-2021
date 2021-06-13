@@ -236,11 +236,15 @@ public static class TransformDeepChildExtension
 
 public static class Rigidbody2DExtension
 {
-    public static void AddExplosionForce(this Rigidbody2D body, float explosionForce, Vector3 explosionPosition, float explosionRadius)
-    {
+    public static void AddExplosionForce(this Rigidbody2D body, float explosionForce, Vector3 explosionPosition, float explosionRadius, Vector3? position = null)
+    { 
         var dir = (body.transform.position - explosionPosition);
         float wearoff = 1 - (dir.magnitude / explosionRadius);
-        body.AddForce(dir.normalized * (wearoff <= 0f ? 0f : explosionForce) * wearoff, ForceMode2D.Impulse);
+        var force = dir.normalized * (wearoff <= 0f ? 0f : explosionForce) * wearoff;
+        if (position.Value == null)
+            body.AddForce(force, ForceMode2D.Impulse);
+        else
+            body.AddForceAtPosition(force, position.Value, ForceMode2D.Impulse);
     }
 
     public static void AddExplosionForce(this Rigidbody2D body, float explosionForce, Vector3 explosionPosition, float explosionRadius, float upliftModifier)

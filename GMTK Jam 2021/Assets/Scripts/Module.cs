@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
 public class Module : MonoBehaviour {
     HashSet<KeyCode> buttons;
     protected List<Module> children;
@@ -24,13 +23,10 @@ public class Module : MonoBehaviour {
 
     public bool isDetached;
 
-    Rigidbody2D rb;
-
-    protected virtual void Start() {
+    protected virtual void Awake() {
         children = new List<Module>();
         buttons = new HashSet<KeyCode>();
         health = max_health;
-        rb = GetComponent<Rigidbody2D>();
     }
 
     public void AssignButton(KeyCode key) {
@@ -46,13 +42,13 @@ public class Module : MonoBehaviour {
         parent.children.Add(this);
         this.parent = parent;
         mainModule = parent.mainModule;
-        mainModule.GetComponent<MainModule>().AddModule(this);
-
         //physically attach the module's gameobject
         transform.position = pivot.position;
         transform.up = -pivot.up;
-        FixedJoint2D joint = gameObject.AddComponent<FixedJoint2D>();
-        joint.connectedBody = parent.GetComponent<Rigidbody2D>();
+        if (pivot != transform)
+            transform.parent = mainModule.transform;
+
+        mainModule.GetComponent<MainModule>().AddModule(this);
     }
 
     public void Detach() {
@@ -61,8 +57,7 @@ public class Module : MonoBehaviour {
         parent.children.Remove(this);
         mainModule = null;
         parent = null;
-
-        Destroy(GetComponent<FixedJoint2D>());
+        transform.parent = null;
     }
     public List<Module> GetChildModules() {
         return children;
@@ -72,9 +67,6 @@ public class Module : MonoBehaviour {
         if (health <= 0) {
             Die();
         }
-
-        if (!isDetached)
-            rb.angularVelocity = 0;
 
         bool buttonHeld = false;
 
@@ -141,7 +133,7 @@ public class Module : MonoBehaviour {
             Rigidbody2D rb = collider.attachedRigidbody;
 
             if (rb != null) {
-                rb.AddExplosionForce(power, transform.position, radius);
+                rb.AddExplosionForce(power, transform.position, radius, position:collider.transform.position);
             }
 
             Module module = collider.GetComponent<Module>();
@@ -153,7 +145,7 @@ public class Module : MonoBehaviour {
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision) {
+    public virtual void OnCollision(Collision2D collision) {
         if (collision.gameObject.tag != "projectile") {
             float impulse = collision.contacts[0].normalImpulse;
             if (impulse > impact_velocity_threshold)

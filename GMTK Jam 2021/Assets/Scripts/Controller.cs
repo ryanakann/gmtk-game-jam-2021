@@ -19,10 +19,10 @@ public class Controller : MonoBehaviour {
         return pressedKeys.Contains(key);
     }
 
-    protected void press(KeyCode key) {
+    public void press(KeyCode key) {
         pressedKeys.Add(key);
     }
-    protected void release(KeyCode key) {
+    public void release(KeyCode key) {
         pressedKeys.Remove(key);
     }
 }

@@ -28,9 +28,9 @@ public class ShieldModule : Module
 
     Collider2D shield_collider;
 
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start();
+        base.Awake();
 
         is_active = false;
         shield_collider.enabled = false;

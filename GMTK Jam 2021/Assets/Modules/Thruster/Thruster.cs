@@ -14,21 +14,21 @@ public class Thruster : Module {
         return transform.up;
     }
     public bool shouldFireForward() {
-        Vector2 forward = mainModule.transform.up;
-        return Vector2.Dot(getFiringDirection(), forward) < -epsilon;
+        Vector2 forward = mainModule.transform.up; // 0, 1, 0, 1
+        return Vector2.Dot(getFiringDirection(), forward) > epsilon;
     }
     public bool shouldFireBackward() {
-        Vector2 forward = mainModule.transform.up;
+        Vector2 forward = -mainModule.transform.up; // 0, -1 downward facing module   0, -1,  0, 1
         return Vector2.Dot(getFiringDirection(), forward) > epsilon;
     }
     public bool shouldFireCounterclockwise() {
-        Vector3 center = mainModule.GetComponent<MainModule>().centerOfMass;
+        Vector3 center = mainModule.GetComponent<MainModule>().rb.centerOfMass;
         Vector2 diff = gameObject.transform.position - center;
         Vector2 perp = Vector2.Perpendicular(diff);
         return Vector2.Dot(getFiringDirection(), perp) < -epsilon;
     }
     public bool shouldFireClockwise() {
-        Vector3 center = mainModule.GetComponent<MainModule>().centerOfMass;
+        Vector3 center = mainModule.GetComponent<MainModule>().rb.centerOfMass;
         Vector2 diff = gameObject.transform.position - center;
         Vector2 perp = Vector2.Perpendicular(diff);
         return Vector2.Dot(getFiringDirection(), perp) > epsilon;
@@ -47,14 +47,14 @@ public class Thruster : Module {
             UnassignButton(KeyCode.S);
         }
         if (shouldFireCounterclockwise()) {
-            AssignButton(KeyCode.A);
-        } else {
-            UnassignButton(KeyCode.A);
-        }
-        if (shouldFireClockwise()) {
             AssignButton(KeyCode.D);
         } else {
             UnassignButton(KeyCode.D);
+        }
+        if (shouldFireClockwise()) {
+            AssignButton(KeyCode.A);
+        } else {
+            UnassignButton(KeyCode.A);
         }
     }
 
@@ -68,7 +68,8 @@ public class Thruster : Module {
         //TODO: set flame sprite inactive
         base.Update();//will determine if still firing
         if (firing) {
-            GetComponent<Rigidbody2D>().AddForce(getFiringDirection() * strength * Time.deltaTime);
+            Debug.DrawRay(transform.position, getFiringDirection() * strength);
+            mainModule.GetComponent<MainModule>().rb.AddForceAtPosition(getFiringDirection() * strength * Time.deltaTime, transform.position);
         }
     }
     public override void OnButtonHeld() {
