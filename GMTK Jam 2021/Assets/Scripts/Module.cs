@@ -21,7 +21,7 @@ public class Module : MonoBehaviour {
     float impact_velocity_threshold;
 
     [SerializeField]
-    float impact_damage_scaler;
+    float impact_damage_coefficient;
 
     float disabled_timer = 0f;
     protected bool is_disabled = false;
@@ -140,15 +140,20 @@ public class Module : MonoBehaviour {
         }
     }
 
+    public virtual void Jostle(float impulse)
+    {
+        if (impulse > impact_velocity_threshold)
+        {
+            Damage(impulse * impact_damage_coefficient);
+        }
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag != "projectile")
         {
             float impulse = collision.contacts[0].normalImpulse;
-            if (impulse > impact_velocity_threshold)
-            {
-                Damage(impulse * impact_damage_scaler);
-            }
+            Jostle(impulse);   
         }
     }
 }
