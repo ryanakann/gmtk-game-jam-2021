@@ -44,10 +44,12 @@ public class Module : MonoBehaviour {
         this.parent = parent;
         mainModule = parent.mainModule;
         mainModule.GetComponent<MainModule>().AddModule(this);
-        //TODO: physically attach the module's gameobject
+
+        //physically attach the module's gameobject
         FixedJoint2D joint = gameObject.AddComponent<FixedJoint2D>();
         transform.position = Vector2.zero;
-        transform.SetParent(pivot);
+        transform.forward = pivot.forward;
+        joint.connectedBody = parent.GetComponent<Rigidbody2D>();
     }
 
     public void Detach() {
@@ -56,6 +58,7 @@ public class Module : MonoBehaviour {
         parent.children.Remove(this);
         mainModule = null;
         parent = null;
+
         Destroy(GetComponent<FixedJoint2D>());
     }
     public List<Module> GetChildModules() {
@@ -88,8 +91,9 @@ public class Module : MonoBehaviour {
         }
     }
     public virtual void Die() {
-        Destroy(gameObject);
+        Detach();
         children.ForEach(child => child.Die());
+        Destroy(gameObject);
     }
 
     public virtual void OnButtonDown() {
