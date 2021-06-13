@@ -41,9 +41,14 @@ public class Module : MonoBehaviour {
         return buttons.Remove(key);
     }
 
+    public virtual void AddChild(Module child)
+    {
+        children.Add(child);
+    }
+
     public virtual void SetParent(Module parent, Transform pivot) {
         isDetached = false;
-        parent.children.Add(this);
+        parent.AddChild(this);
         this.parent = parent;
         mainModule = parent.mainModule;
         mainModule.GetComponent<MainModule>().AddModule(this);

@@ -5,11 +5,17 @@ using UnityEngine;
 public delegate void DeliveryEvent();
 public delegate void EmptySpot(Transform delivery_spot);
 
+public enum DeliveryType { Punko, Corpo, Crimo, Valuables, Illicits, Volatiles };
+
 public class Deliverable : Module
 {
 
     public DeliveryEvent delivery_resolution;
     public EmptySpot empty_spot_event;
+
+    [SerializeField]
+    DeliveryType type;
+    public DeliveryType DType { get { return type; } }
 
     [SerializeField]
     float max_payout;
@@ -74,11 +80,15 @@ public class Deliverable : Module
     public void IncreaseSatisfaction(float satisfaction_amount)
     {
         satisfaction += satisfaction_amount;
+        if (satisfaction > satisfaction_max)
+            satisfaction = satisfaction_max;
     }
 
     public void DecreaseSatisfaction(float satisfaction_amount)
     {
         satisfaction -= satisfaction_amount;
+        if (satisfaction < 0f)
+            satisfaction = 0f;
     }
 
     void GetDelivered()
