@@ -20,9 +20,11 @@ public class MainModule : Module {
             t.SetParent(this, t.transform);
         }
     }
+    
     protected override void Update() {
         base.Update();
     }
+    
     public void AddModule(Module m) {
         modules.Add(m);
         foreach (var mod in modules)
@@ -33,6 +35,7 @@ public class MainModule : Module {
             }
         }
     }
+    
     public bool RemoveModule(Module m) {
         bool result = modules.Remove(m);
         foreach (var mod in modules)
@@ -43,6 +46,16 @@ public class MainModule : Module {
             }
         }
         return result;
+    }
+
+    public void AddDeliverable(Deliverable d)
+    {
+        deliverables.Add(d);
+    }
+
+    public bool RemoveDeliverable(Deliverable d)
+    {
+        return deliverables.Remove(d);
     }
 
     public void PropagateJostle(float impact)
