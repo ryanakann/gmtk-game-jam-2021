@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ModulePlacementHandler : MonoBehaviour
 {
-    Transform portPoints, activatedPort;
+    Transform portPoints, activatedPort, activeModule;
     bool validPort;
 
     void Awake()
@@ -22,7 +22,7 @@ public class ModulePlacementHandler : MonoBehaviour
         if (!activatedPort)
             return;
 
-        validPort = Physics2D.OverlapCircle(activatedPort.position, 1f);
+        validPort = Physics2D.OverlapCircle(activatedPort.position, 0.5f);
         
         if (validPort)
         {
@@ -38,6 +38,7 @@ public class ModulePlacementHandler : MonoBehaviour
     {
         if (MouseController.instance.targetModule)
         {
+            activeModule = MouseController.instance.targetModule;
             float minDistance = float.PositiveInfinity;
             Transform port = null;
             foreach (Transform t in portPoints)
@@ -49,10 +50,9 @@ public class ModulePlacementHandler : MonoBehaviour
                     port = t;
                 }
             }
-            if (port && port != activatedPort)
+            if (port && activatedPort && port != activatedPort)
             {
                 activatedPort.gameObject.SetActive(false);
-                activatedPort = port;
             }
             activatedPort = port;
             activatedPort?.gameObject?.SetActive(true);
@@ -61,14 +61,17 @@ public class ModulePlacementHandler : MonoBehaviour
 
     private void OnMouseExit()
     {
+        activeModule = null;
         activatedPort?.gameObject?.SetActive(false);
     }
 
     private void OnMouseUp()
     {
-        if (MouseController.instance.targetModule && validPort)
+        print("SCREEEEEEE " + activeModule);
+        if (activeModule && validPort)
         {
-            // place targetModule
+            Module targetModule = activeModule.GetComponent<Module>();
+            targetModule.SetParent(GetComponent<Module>(), activatedPort);
         }
     }
 }

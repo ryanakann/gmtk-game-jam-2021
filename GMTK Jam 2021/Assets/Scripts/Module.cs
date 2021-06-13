@@ -47,7 +47,7 @@ public class Module : MonoBehaviour {
 
         //physically attach the module's gameobject
         FixedJoint2D joint = gameObject.AddComponent<FixedJoint2D>();
-        transform.position = Vector2.zero;
+        transform.position = pivot.position;
         transform.forward = pivot.forward;
         joint.connectedBody = parent.GetComponent<Rigidbody2D>();
     }
