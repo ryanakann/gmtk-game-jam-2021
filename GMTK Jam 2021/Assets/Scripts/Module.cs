@@ -26,6 +26,8 @@ public class Module : MonoBehaviour {
     float disabled_timer = 0f;
     protected bool is_disabled = false;
 
+    public bool isDetached;
+
     protected virtual void Start() {
         buttons = new HashSet<KeyCode>();
         ports = new List<Port>();
