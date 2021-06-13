@@ -22,13 +22,13 @@ public class Thruster : Module {
         return Vector2.Dot(getFiringDirection(), forward) > epsilon;
     }
     public bool shouldFireCounterclockwise() {
-        Vector3 center = mainModule.GetComponent<MainModule>().getCenterOfMass();
+        Vector3 center = mainModule.GetComponent<MainModule>().centerOfMass;
         Vector2 diff = gameObject.transform.position - center;
         Vector2 perp = Vector2.Perpendicular(diff);
         return Vector2.Dot(getFiringDirection(), perp) < -epsilon;
     }
     public bool shouldFireClockwise() {
-        Vector3 center = mainModule.GetComponent<MainModule>().getCenterOfMass();
+        Vector3 center = mainModule.GetComponent<MainModule>().centerOfMass;
         Vector2 diff = gameObject.transform.position - center;
         Vector2 perp = Vector2.Perpendicular(diff);
         return Vector2.Dot(getFiringDirection(), perp) > epsilon;
