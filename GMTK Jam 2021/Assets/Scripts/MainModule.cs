@@ -7,7 +7,7 @@ public class MainModule : Module {
     HashSet<Module> modules;//modules under my control
     public Vector2 centerOfMass { get; private set; }
 
-    List<Deliverable> deliverables;
+    List<Deliverable> deliverables = new List<Deliverable>();
 
     protected override void Start() {
         base.Start();
@@ -23,10 +23,25 @@ public class MainModule : Module {
     
     public void AddModule(Module m) {
         modules.Add(m);
+        foreach (var mod in modules)
+        {
+            if (mod is Thruster)
+            {
+                ((Thruster)mod).updateButtons();
+            }
+        }
     }
     
     public bool RemoveModule(Module m) {
-        return modules.Remove(m);
+        bool result = modules.Remove(m);
+        foreach (var mod in modules)
+        {
+            if (mod is Thruster)
+            {
+                ((Thruster)mod).updateButtons();
+            }
+        }
+        return result;
     }
 
     public void AddDeliverable(Deliverable d)
