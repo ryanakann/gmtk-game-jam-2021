@@ -35,7 +35,7 @@ public class DeliveryZone : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (active_exchanges < max_active_exchanges && cooldown >= 0f)
+        if (empty_delivery_spots.Count <= 0 && active_exchanges < max_active_exchanges && cooldown >= 0f)
         {
             cooldown -= Time.deltaTime;
 
@@ -63,12 +63,7 @@ public class DeliveryZone : MonoBehaviour
 
     void SpawnDeliverable()
     {
-        if (empty_delivery_spots.Count <= 0)
-        {
-            cooldown = Random.Range(min_cooldown, max_cooldown);
-            return;
-        }
-
+ 
         Transform delivery_spot = delivery_spots[Random.Range(0, delivery_spots.Length)];
 
         DeliveryZone zone_to_deliver_to = DeliveryManager.instance.GetZoneForDelivery(this);

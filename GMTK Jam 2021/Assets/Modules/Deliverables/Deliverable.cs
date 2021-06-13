@@ -29,6 +29,9 @@ public class Deliverable : Module
     [SerializeField]
     float jostle_satisfaction_coefficient;
 
+    [SerializeField]
+    float timeout_time;
+
     float satisfaction;
 
     Transform destination;
@@ -43,8 +46,19 @@ public class Deliverable : Module
     protected override void Update()
     {
         base.Update();
-        satisfaction -= satisfaction_reduction_per_second * Time.deltaTime;
-        
+
+        if (spawn_point)
+        {
+            timeout_time -= Time.deltaTime;
+            if (timeout_time <= 0f)
+            {
+                Die();
+            }
+        }
+        else
+        {
+            satisfaction -= satisfaction_reduction_per_second * Time.deltaTime;
+        }
     }
 
     public void SetSpawnPoint(Transform in_spawn_point)
@@ -85,10 +99,13 @@ public class Deliverable : Module
         mainModule.GetComponent<MainModule>().AddDeliverable(this);
 
         empty_spot_event.Invoke(spawn_point);
+        spawn_point = null;
     }
 
     public override void Die()
     {
+        if (spawn_point)
+            empty_spot_event.Invoke(spawn_point);
         delivery_resolution.Invoke();
         base.Die();
     }
