@@ -8,6 +8,10 @@ public class Controller : MonoBehaviour {
 
     HashSet<KeyCode> pressedKeys;
 
+    private void Start() {
+        pressedKeys = new HashSet<KeyCode>();
+    }
+
     public bool GetKey(KeyCode key) {
         if (player) {
             return Input.GetKey(key);
