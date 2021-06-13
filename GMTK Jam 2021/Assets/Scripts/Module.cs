@@ -16,6 +16,12 @@ public class Module : MonoBehaviour {
     float max_health;
     float health;
 
+    [SerializeField]
+    float impact_velocity_threshold;
+
+    [SerializeField]
+    float impact_damage_scaler;
+
     float disabled_timer = 0f;
     protected bool is_disabled = false;
 
@@ -132,6 +138,18 @@ public class Module : MonoBehaviour {
                 Vector2 diff = collider.transform.position - transform.position;
                 float distance = diff.magnitude;
                 module.Damage(power / distance);
+            }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag != "projectile")
+        {
+            float impulse = collision.contacts[0].normalImpulse;
+            if (impulse > impact_velocity_threshold)
+            {
+                Damage(impulse * impact_damage_scaler);
             }
         }
     }

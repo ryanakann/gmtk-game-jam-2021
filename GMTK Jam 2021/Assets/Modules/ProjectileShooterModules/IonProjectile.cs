@@ -12,9 +12,9 @@ public class IonProjectile : Projectile
     [SerializeField]
     float disable_time;
 
-    private void Awake()
+    protected override void Awake()
     {
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        base.Awake();
         rb.velocity = transform.forward * speed;
     }
 

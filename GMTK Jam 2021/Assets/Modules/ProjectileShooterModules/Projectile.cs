@@ -11,6 +11,7 @@ public abstract class Projectile : MonoBehaviour
     protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        gameObject.tag = "projectile";
     }
 
     public void SetOwner(Module module)
