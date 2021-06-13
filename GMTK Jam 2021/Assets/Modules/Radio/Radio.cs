@@ -81,7 +81,7 @@ public class Radio : MonoBehaviour
         station1.volume = 0f;
         station2.volume = 1f;
         activeStationIndex = index;
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         transitioning = false;
     }
 }
