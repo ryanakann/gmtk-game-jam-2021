@@ -9,9 +9,9 @@ public class MouseController : MonoBehaviour
 
     public static MouseController instance;
 
-    [HideInInspector] public GameObject targetModule;
+    [HideInInspector] public Transform targetModule;
 
-    [HideInInspector] MouseState mouseState;
+    bool changeState, down;
 
     public LayerMask mask;
 
@@ -32,14 +32,13 @@ public class MouseController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButton(0))
-            mouseState = (mouseState == MouseState.Up || mouseState == MouseState.Released) ? MouseState.Pressed : MouseState.Down;
-        else
-            mouseState = (mouseState == MouseState.Down || mouseState == MouseState.Pressed) ? MouseState.Released : MouseState.Up;
+        bool newState = (Input.GetMouseButton(0));
+        changeState = newState == down;
+        down = newState;
 
-        if (mouseState == MouseState.Released)
+        if (!down && changeState)
         {
-            // clear targetModule
+            targetModule = null;
         }
 
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 1, mask);
@@ -48,14 +47,22 @@ public class MouseController : MonoBehaviour
             Module mod = hit.collider.GetComponent<Module>();
             if (mod)
             {
+                if (targetModule && mod != targetModule && !down)
+                {
+                    // clear targetModule
+                    targetModule = null;
+                }
                 // clicking on a module should display information in the corner of the screen
-                // if floating, activate dragging mode
                 if (mod.isDetached)
                 {
-
+                    if (down && changeState)
+                    {
+                        // play sound effect
+                        // update ui
+                        targetModule = mod.transform;
+                    }
                 }
             }
-            Debug.Log("Target Position: " + hit.collider.gameObject.transform.position);
         }
     }
 }
