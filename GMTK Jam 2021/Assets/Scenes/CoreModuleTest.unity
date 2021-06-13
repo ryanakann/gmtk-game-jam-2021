@@ -1013,7 +1013,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f9a75af206be4663bb73854f9332c02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: 0
+  player: 1
 --- !u!1 &1420002101
 GameObject:
   m_ObjectHideFlags: 0
@@ -1024,7 +1024,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1420002104}
   - component: {fileID: 1420002103}
-  - component: {fileID: 1420002105}
+  - component: {fileID: 1420002102}
   m_Layer: 7
   m_Name: Module
   m_TagString: Untagged
@@ -1032,6 +1032,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1420002102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1420002101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f366ded9e4e4e4922941045c796463f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  max_health: 10
+  impact_velocity_threshold: 0
+  impact_damage_coefficient: 0
+  isDetached: 1
+  strength: 30
 --- !u!50 &1420002103
 Rigidbody2D:
   serializedVersion: 4
@@ -1069,22 +1086,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1420002105
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1420002101}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1a479be770174d7fa0d45ae34887261, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  max_health: 10
-  impact_velocity_threshold: 0
-  impact_damage_coefficient: 0
-  isDetached: 1
 --- !u!1 &1512839923
 GameObject:
   m_ObjectHideFlags: 0

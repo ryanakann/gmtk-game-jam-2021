@@ -24,10 +24,13 @@ public class Module : MonoBehaviour {
 
     public bool isDetached;
 
+    Rigidbody2D rb;
+
     protected virtual void Start() {
         children = new List<Module>();
         buttons = new HashSet<KeyCode>();
         health = max_health;
+        rb = GetComponent<Rigidbody2D>();
     }
 
     public void AssignButton(KeyCode key) {
@@ -46,9 +49,9 @@ public class Module : MonoBehaviour {
         mainModule.GetComponent<MainModule>().AddModule(this);
 
         //physically attach the module's gameobject
-        FixedJoint2D joint = gameObject.AddComponent<FixedJoint2D>();
         transform.position = pivot.position;
-        transform.forward = pivot.forward;
+        transform.up = -pivot.up;
+        FixedJoint2D joint = gameObject.AddComponent<FixedJoint2D>();
         joint.connectedBody = parent.GetComponent<Rigidbody2D>();
     }
 
@@ -69,6 +72,9 @@ public class Module : MonoBehaviour {
         if (health <= 0) {
             Die();
         }
+
+        if (!isDetached)
+            rb.angularVelocity = 0;
 
         bool buttonHeld = false;
 
