@@ -155,14 +155,14 @@ public class Module : MonoBehaviour {
     public virtual void OnCollision(Collision2D collision) {
         if (collision.gameObject.tag != "projectile") {
             float impulse = collision.relativeVelocity.magnitude;
+            if (mainModule && mainModule != this)
+            {
+                mainModule.GetComponent<MainModule>().PropagateJostle(impulse);
+            }
             if (impulse > impact_velocity_threshold)
             {
                 print("oh boy we do be gettin damage from the impulse: " + impulse);
                 Damage(impulse * impact_damage_coefficient);
-            }
-            if (mainModule != this)
-            {
-                mainModule.GetComponent<MainModule>().PropagateJostle(impulse);
             }
         }
     }
