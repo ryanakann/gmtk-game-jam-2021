@@ -3,12 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class Thruster : Module {
+public class Thruster : ModuleBehavior {
     [SerializeField]
     float strength = 30f;
 
+    [SerializeField]
+    SpriteRenderer engine_renderer;
+
     float epsilon = 0.0001f;
     bool firing;
+
+    Color normal_color;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        if (engine_renderer)
+            normal_color = engine_renderer.color;
+
+        if (mainModule)
+            updateButtons();
+
+    }
 
     public Vector2 getFiringDirection() {
         return transform.up;
@@ -58,22 +74,32 @@ public class Thruster : Module {
         }
     }
 
+    void Fire()
+    {
+        Debug.DrawRay(transform.position, getFiringDirection() * strength);
+
+        if (engine_renderer)
+            engine_renderer.color = Color.red;
+
+        mainModule.GetComponent<MainModule>().rb.AddForceAtPosition(getFiringDirection() * strength * Time.deltaTime, transform.position);
+    }
+
     protected override void Update() {
-        if (isDetached)
-        {
-            return;
-        }
-        //updateButtons();
         firing = false;
         //TODO: set flame sprite inactive
         base.Update();//will determine if still firing
         if (firing) {
-            Debug.DrawRay(transform.position, getFiringDirection() * strength);
-            mainModule.GetComponent<MainModule>().rb.AddForceAtPosition(getFiringDirection() * strength * Time.deltaTime, transform.position);
+            Fire();
         }
     }
     public override void OnButtonHeld() {
         firing = true;
         //TODO: set flame sprite active
+    }
+
+    public override void OnButtonUp()
+    {
+        if (engine_renderer)
+            engine_renderer.color = normal_color;
     }
 }

@@ -22,11 +22,7 @@ public class ModulePlacementHandler : MonoBehaviour
         if (!activatedPort)
             return;
 
-        var ba = Physics2D.OverlapCircle(activatedPort.position, 0.25f);
-
-        validPort = ba == null;
-
-        print("valid port: " + ba);
+        validPort = !Physics2D.OverlapCircle(activatedPort.position, 0.25f);
 
         if (validPort)
         {

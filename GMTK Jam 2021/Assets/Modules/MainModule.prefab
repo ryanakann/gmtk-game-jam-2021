@@ -73,11 +73,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f366ded9e4e4e4922941045c796463f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max_health: 10
-  impact_velocity_threshold: 0
-  impact_damage_coefficient: 0
-  isDetached: 0
+  active: 1
+  mainModule: {fileID: 2731643568083580915}
+  module: {fileID: 2731643568083580915}
   strength: 80
+  engine_renderer: {fileID: 0}
 --- !u!1 &2731643567336964538
 GameObject:
   m_ObjectHideFlags: 0
@@ -121,11 +121,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f366ded9e4e4e4922941045c796463f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max_health: 10
-  impact_velocity_threshold: 0
-  impact_damage_coefficient: 0
-  isDetached: 0
+  active: 1
+  mainModule: {fileID: 2731643568083580915}
+  module: {fileID: 2731643568083580915}
   strength: 80
+  engine_renderer: {fileID: 0}
 --- !u!1 &2731643567397062577
 GameObject:
   m_ObjectHideFlags: 0
@@ -169,11 +169,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f366ded9e4e4e4922941045c796463f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max_health: 10
-  impact_velocity_threshold: 0
-  impact_damage_coefficient: 0
-  isDetached: 0
+  active: 1
+  mainModule: {fileID: 2731643568083580915}
+  module: {fileID: 2731643568083580915}
   strength: 80
+  engine_renderer: {fileID: 0}
 --- !u!1 &2731643567494388618
 GameObject:
   m_ObjectHideFlags: 0
@@ -217,11 +217,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f366ded9e4e4e4922941045c796463f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max_health: 10
-  impact_velocity_threshold: 0
-  impact_damage_coefficient: 0
-  isDetached: 0
+  active: 1
+  mainModule: {fileID: 2731643568083580915}
+  module: {fileID: 2731643568083580915}
   strength: 80
+  engine_renderer: {fileID: 0}
 --- !u!1 &2731643567551475766
 GameObject:
   m_ObjectHideFlags: 0
@@ -295,11 +295,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f366ded9e4e4e4922941045c796463f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max_health: 10
-  impact_velocity_threshold: 0
-  impact_damage_coefficient: 0
-  isDetached: 0
+  active: 1
+  mainModule: {fileID: 2731643568083580915}
+  module: {fileID: 2731643568083580915}
   strength: 80
+  engine_renderer: {fileID: 0}
 --- !u!1 &2731643567599981534
 GameObject:
   m_ObjectHideFlags: 0
@@ -515,11 +515,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f366ded9e4e4e4922941045c796463f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max_health: 10
-  impact_velocity_threshold: 0
-  impact_damage_coefficient: 0
-  isDetached: 0
+  active: 1
+  mainModule: {fileID: 2731643568083580915}
+  module: {fileID: 2731643568083580915}
   strength: 80
+  engine_renderer: {fileID: 0}
 --- !u!1 &2731643568083580916
 GameObject:
   m_ObjectHideFlags: 0
@@ -665,11 +665,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f366ded9e4e4e4922941045c796463f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max_health: 10
-  impact_velocity_threshold: 0
-  impact_damage_coefficient: 0
-  isDetached: 0
+  active: 1
+  mainModule: {fileID: 2731643568083580915}
+  module: {fileID: 2731643568083580915}
   strength: 80
+  engine_renderer: {fileID: 0}
 --- !u!1 &2731643568433254259
 GameObject:
   m_ObjectHideFlags: 0
@@ -713,11 +713,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f366ded9e4e4e4922941045c796463f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max_health: 10
-  impact_velocity_threshold: 0
-  impact_damage_coefficient: 0
-  isDetached: 0
+  active: 1
+  mainModule: {fileID: 2731643568083580915}
+  module: {fileID: 2731643568083580915}
   strength: 80
+  engine_renderer: {fileID: 0}
 --- !u!1 &2731643569057072345
 GameObject:
   m_ObjectHideFlags: 0
@@ -791,11 +791,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f366ded9e4e4e4922941045c796463f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max_health: 10
-  impact_velocity_threshold: 0
-  impact_damage_coefficient: 0
-  isDetached: 0
+  active: 1
+  mainModule: {fileID: 2731643568083580915}
+  module: {fileID: 2731643568083580915}
   strength: 80
+  engine_renderer: {fileID: 0}
 --- !u!1 &2731643569146034228
 GameObject:
   m_ObjectHideFlags: 0
@@ -875,11 +875,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f366ded9e4e4e4922941045c796463f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max_health: 10
-  impact_velocity_threshold: 0
-  impact_damage_coefficient: 0
-  isDetached: 0
+  active: 1
+  mainModule: {fileID: 2731643568083580915}
+  module: {fileID: 2731643568083580915}
   strength: 80
+  engine_renderer: {fileID: 0}
 --- !u!1 &2731643569244950066
 GameObject:
   m_ObjectHideFlags: 0
@@ -923,11 +923,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f366ded9e4e4e4922941045c796463f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max_health: 10
-  impact_velocity_threshold: 0
-  impact_damage_coefficient: 0
-  isDetached: 0
+  active: 1
+  mainModule: {fileID: 2731643568083580915}
+  module: {fileID: 2731643568083580915}
   strength: 80
+  engine_renderer: {fileID: 0}
 --- !u!1 &2731643569270020299
 GameObject:
   m_ObjectHideFlags: 0
@@ -1149,8 +1149,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f366ded9e4e4e4922941045c796463f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max_health: 10
-  impact_velocity_threshold: 0
-  impact_damage_coefficient: 0
-  isDetached: 0
+  active: 1
+  mainModule: {fileID: 2731643568083580915}
+  module: {fileID: 2731643568083580915}
   strength: 80
+  engine_renderer: {fileID: 0}

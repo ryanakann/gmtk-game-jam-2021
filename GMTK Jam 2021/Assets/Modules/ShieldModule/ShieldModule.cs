@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShieldModule : Module
+public class ShieldModule : ModuleBehavior
 {
     [SerializeField]
     float charge_used_per_second;
@@ -58,7 +58,7 @@ public class ShieldModule : Module
                 Pop();
             }
         }
-        else if (!is_disabled)
+        else if (active)
         {
             current_charge += charge_regened_per_second * Time.deltaTime;
         }
@@ -67,20 +67,20 @@ public class ShieldModule : Module
     public override void OnButtonDown()
     {
         if (!is_active && current_charge >= (max_charge * minimum_charge_percent_for_activation))
-            Activate();
+            TurnOn();
         else if (is_active)
-            Deactivate();
+            TurnOff();
         else
             current_charge -= premature_activation_penalty;
     }
 
-    void Activate()
+    void TurnOn()
     {
         is_active = true;
         shield_collider.enabled = true;
     }
 
-    void Deactivate()
+    void TurnOff()
     {
         is_active = false;
         shield_collider.enabled = false;
@@ -101,13 +101,13 @@ public class ShieldModule : Module
             }
         }
 
-        Deactivate();
+        TurnOff();
     }
 
-    public override void Disable(float seconds_disabled)
+    public override void Deactivate()
     {
-        base.Disable(seconds_disabled);
-        Deactivate();
+        base.Deactivate();
+        TurnOff();
     }
 
     public void ShieldDamage(float damage_amount)

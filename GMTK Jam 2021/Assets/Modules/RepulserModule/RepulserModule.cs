@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RepulserModule : Module
+public class RepulserModule : ModuleBehavior
 {
 
     [SerializeField]

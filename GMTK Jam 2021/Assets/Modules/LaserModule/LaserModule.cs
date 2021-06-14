@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LaserModule : Module
+public class LaserModule : ModuleBehavior
 {
 
     [SerializeField]
@@ -34,7 +34,7 @@ public class LaserModule : Module
         current_heat += heatup_rate * Time.deltaTime;
 
         if (current_heat >= heat_cap)
-            Explode(explode_power, explode_radius);
+            module.Explode(explode_power, explode_radius);
         else
             Shoot();
     }

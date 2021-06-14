@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NanobotsModule : Module
+public class NanobotsModule : ModuleBehavior
 {
     [SerializeField]
     float healing_per_second;
@@ -22,6 +22,7 @@ public class NanobotsModule : Module
 
     protected override void Update()
     {
+        base.Update();
         if (is_active)
         {
             healing_timer -= Time.deltaTime;

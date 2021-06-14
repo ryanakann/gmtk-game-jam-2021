@@ -7,7 +7,7 @@ public delegate void EmptySpot(Transform delivery_spot);
 
 public enum DeliveryType { Punko, Corpo, Crimo, Valuables, Illicits, Volatiles };
 
-public class Deliverable : Module
+public class Deliverable : ModuleBehavior
 {
 
     public DeliveryEvent delivery_resolution;
@@ -98,15 +98,15 @@ public class Deliverable : Module
         GameManager.instance.Pay(payout);
         GameManager.instance.Rate(percent_satisfied);
 
-        mainModule.GetComponent<MainModule>().RemoveDeliverable(this);
+        mainModule.RemoveDeliverable(this);
 
         delivery_resolution.Invoke();
     }
 
-    public override void SetParent(Module parent, Transform pivot)
+    public override void SetMainModule(MainModule m)
     {
-        base.SetParent(parent, pivot);
-        mainModule.GetComponent<MainModule>().AddDeliverable(this);
+        base.SetMainModule(m);
+        m.AddDeliverable(this);
 
         empty_spot_event.Invoke(spawn_point);
         spawn_point = null;

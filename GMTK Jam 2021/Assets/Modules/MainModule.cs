@@ -8,7 +8,6 @@ public class MainModule : Module {
     HashSet<Module> modules;//modules under my control
 
     List<Deliverable> deliverables = new List<Deliverable>();
-    [HideInInspector] public Rigidbody2D rb;
 
     protected void Start() {
         modules = new HashSet<Module>();
@@ -17,7 +16,8 @@ public class MainModule : Module {
         rb = GetComponent<Rigidbody2D>();
         foreach (var t in GetComponentsInChildren<Thruster>())
         {
-            t.SetParent(this, t.transform);
+            t.Activate();
+            t.updateButtons();
         }
     }
     
@@ -29,9 +29,9 @@ public class MainModule : Module {
         modules.Add(m);
         foreach (var mod in modules)
         {
-            if (mod is Thruster)
+            foreach(Thruster thruster in mod.GetComponents<Thruster>())
             {
-                ((Thruster)mod).updateButtons();
+                thruster.updateButtons();
             }
         }
     }
@@ -40,9 +40,9 @@ public class MainModule : Module {
         bool result = modules.Remove(m);
         foreach (var mod in modules)
         {
-            if (mod is Thruster)
+            foreach (Thruster thruster in mod.GetComponents<Thruster>())
             {
-                ((Thruster)mod).updateButtons();
+                thruster.updateButtons();
             }
         }
         return result;

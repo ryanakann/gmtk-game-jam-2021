@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Module : MonoBehaviour {
-    HashSet<KeyCode> buttons;
     protected List<Module> children;
     protected Module parent;
     protected GameObject mainModule;//which ship am I attached to?
@@ -18,23 +17,23 @@ public class Module : MonoBehaviour {
     [SerializeField]
     float impact_damage_coefficient;
 
+    ModuleBehavior[] behaviors;
+
     float disabled_timer = 0f;
     protected bool is_disabled = false;
 
     public bool isDetached;
 
+    [HideInInspector]
+    public Rigidbody2D rb;
+
     protected virtual void Awake() {
         children = new List<Module>();
-        buttons = new HashSet<KeyCode>();
         health = max_health;
-    }
 
-    public void AssignButton(KeyCode key) {
-        buttons.Add(key);
-    }
+        rb = GetComponent<Rigidbody2D>();
 
-    public bool UnassignButton(KeyCode key) {
-        return buttons.Remove(key);
+        behaviors = GetComponents<ModuleBehavior>();
     }
 
     public virtual void AddChild(Module child)
@@ -53,7 +52,16 @@ public class Module : MonoBehaviour {
         if (pivot != transform)
             transform.parent = mainModule.transform;
 
-        mainModule.GetComponent<MainModule>().AddModule(this);
+        MainModule mainModuleComponent = mainModule.GetComponent<MainModule>();
+
+        foreach (ModuleBehavior behavior in behaviors)
+        {
+            behavior.SetMainModule(mainModuleComponent);
+        }
+
+        mainModuleComponent.AddModule(this);
+        Destroy(rb);
+        ActivateBehaviors();
     }
 
     public void Detach() {
@@ -66,51 +74,37 @@ public class Module : MonoBehaviour {
         mainModule = null;
         parent = null;
         transform.parent = null;
+        rb = gameObject.AddComponent<Rigidbody2D>();
+        DeactivateBehaviors();
     }
     public List<Module> GetChildModules() {
         return children;
     }
 
     protected virtual void Update() {
-        if (health <= 0) {
-            Die();
-        }
-
-        bool buttonHeld = false;
-
-        if (is_disabled) {
+        if (is_disabled)
+        {
             disabled_timer -= Time.deltaTime;
 
             if (disabled_timer <= 0f)
+            {
                 is_disabled = false;
-            else
-                return;
-        }
-
-        foreach (KeyCode button in buttons) {
-            if (mainModule.GetComponent<Controller>().GetKey(button)) {
-                buttonHeld = true;
+                ActivateBehaviors();
             }
         }
-        if (buttonHeld) {
-            OnButtonHeld();
+
+        if (health <= 0) {
+            Die();
         }
     }
     public virtual void Die() {
+        foreach (ModuleBehavior behavior in behaviors)
+        {
+            behavior.Die();
+        }
+
         Detach();
         Destroy(gameObject);
-    }
-
-    public virtual void OnButtonDown() {
-        //no thoughts head empty
-    }
-
-    public virtual void OnButtonHeld() {
-        //no thoughts head empty
-    }
-
-    public virtual void OnButtonUp() {
-        //no thoughts head empty
     }
 
     public virtual void Heal(float heal_amount) {
@@ -128,9 +122,27 @@ public class Module : MonoBehaviour {
         }
     }
 
-    public virtual void Disable(float seconds_disabled) {
+    public virtual void Disable(float seconds_disabled)
+    {
         is_disabled = true;
         disabled_timer = seconds_disabled;
+        DeactivateBehaviors();
+    }
+
+    void ActivateBehaviors()
+    {
+        foreach (ModuleBehavior b in behaviors)
+        {
+            b.Activate();
+        }
+    }
+
+    void DeactivateBehaviors()
+    {
+        foreach (ModuleBehavior b in behaviors)
+        {
+            b.Deactivate();
+        }
     }
 
     public void Explode(float power, float radius) {
