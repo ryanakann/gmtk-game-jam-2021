@@ -12,13 +12,22 @@ public class ModulePlacementHandler : MonoBehaviour
         portPoints = transform.FindDeepChild("PortPoints");
     }
 
+    private void Update()
+    {
+        CheckActivatedPort();
+    }
+
     public void CheckActivatedPort()
     {
         if (!activatedPort)
             return;
 
-        validPort = Physics2D.OverlapCircle(activatedPort.position, 0.5f);
-        
+        var ba = Physics2D.OverlapCircle(activatedPort.position, 0.25f);
+
+        validPort = ba == null;
+
+        print("valid port: " + ba);
+
         if (validPort)
         {
             // show the good green symbol
@@ -54,7 +63,10 @@ public class ModulePlacementHandler : MonoBehaviour
     public void ClearPort()
     {
         if (activatedPort)
+        {
             activatedPort.gameObject.SetActive(false);
+            activatedPort = null;
+        }            
     }
 
     private void OnMouseExit()
@@ -64,6 +76,7 @@ public class ModulePlacementHandler : MonoBehaviour
 
     public void AddModule(Module module)
     {
-        module.SetParent(GetComponent<Module>(), activatedPort);
+        if (validPort)
+            module.SetParent(GetComponent<Module>(), activatedPort);
     }
 }

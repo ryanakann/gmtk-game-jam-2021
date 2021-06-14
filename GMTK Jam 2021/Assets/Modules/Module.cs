@@ -58,8 +58,11 @@ public class Module : MonoBehaviour {
 
     public void Detach() {
         isDetached = true;
+        if (mainModule == this)
+            return;
         mainModule.GetComponent<MainModule>().RemoveModule(this);
-        parent.children.Remove(this);
+        if (parent != null)
+            parent.children.Remove(this);
         mainModule = null;
         parent = null;
         transform.parent = null;
@@ -95,7 +98,6 @@ public class Module : MonoBehaviour {
     }
     public virtual void Die() {
         Detach();
-        children.ForEach(child => child.Die());
         Destroy(gameObject);
     }
 
@@ -152,9 +154,10 @@ public class Module : MonoBehaviour {
 
     public virtual void OnCollision(Collision2D collision) {
         if (collision.gameObject.tag != "projectile") {
-            float impulse = collision.contacts[0].normalImpulse;
+            float impulse = collision.relativeVelocity.magnitude;
             if (impulse > impact_velocity_threshold)
             {
+                print("oh boy we do be gettin damage from the impulse: " + impulse);
                 Damage(impulse * impact_damage_coefficient);
             }
             if (mainModule != this)

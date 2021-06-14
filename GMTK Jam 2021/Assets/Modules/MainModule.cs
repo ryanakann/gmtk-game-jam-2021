@@ -68,9 +68,12 @@ public class MainModule : Module {
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.otherCollider.GetComponent<Module>())
+        Module module = collision.otherCollider.GetComponentInParent<Module>();
+        print("module is: " + module);
+
+        if (module)
         {
-            collision.otherCollider.GetComponent<Module>().OnCollision(collision);
+            module.OnCollision(collision);
         }
     }
 }
