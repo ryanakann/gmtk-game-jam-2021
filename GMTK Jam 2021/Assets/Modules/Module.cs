@@ -147,21 +147,35 @@ public class Module : MonoBehaviour {
 
     public void Explode(float power, float radius) {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, radius);
-
+        print("it is explosion time");
+        
         foreach (Collider2D collider in colliders) {
+
+            print("collider: " + collider);
+
+            if (collider.gameObject == gameObject)
+                continue;
+            
             Rigidbody2D rb = collider.attachedRigidbody;
 
             if (rb != null) {
                 rb.AddExplosionForce(power, transform.position, radius, position:collider.transform.position);
             }
 
-            Module module = collider.GetComponent<Module>();
+            Module module = collider.GetComponentInParent<Module>();
             if (module != null) {
                 Vector2 diff = collider.transform.position - transform.position;
                 float distance = diff.magnitude;
-                module.Damage(power / distance);
+                float damage = power / distance;
+                module.Damage(damage);
+                print("doing explosion damage: " + damage);
             }
         }
+        
+
+        print("unity you suck");
+
+        Die();
     }
 
     public virtual void OnCollision(Collision2D collision) {

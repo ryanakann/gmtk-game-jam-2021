@@ -16,6 +16,11 @@ public class ModuleBehavior : MonoBehaviour
     [SerializeField]
     protected Module module;
 
+    [SerializeField]
+    KeyCode defaultKey = KeyCode.Space;
+    [SerializeField]
+    bool useDefaultKey = false;
+
     protected virtual void Awake()
     {
         if (!module)
@@ -25,6 +30,8 @@ public class ModuleBehavior : MonoBehaviour
             controller = mainModule.GetComponent<Controller>();
 
         buttons = new HashSet<KeyCode>();
+        if (useDefaultKey)
+            buttons.Add(defaultKey);
     }
 
     protected virtual void Update()
